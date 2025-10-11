@@ -1,0 +1,36 @@
+#!/usr/bin/bash -e
+
+if [ ! -f info.json ]
+then
+  echo "info.json not found"
+  exit 1
+fi
+
+if ! which jq &> /dev/null
+then
+  echo "jq not found"
+  exit 1
+fi
+
+if ! which zip &> /dev/null
+then
+  echo "zip not found"
+  exit 1
+fi
+
+MOD_NAME="$(cat info.json | jq '.name' -r)"
+VERSION="$(cat info.json | jq '.version' -r)"
+
+if ! basename $(pwd)
+then
+  echo "Must be run from the mod directory"
+  exit 1
+fi
+
+if [ -f ${MOD_NAME}_${VERSION}.zip ]
+then
+  rm -f ${MOD_NAME}_${VERSION}.zip
+fi
+
+cd ..
+zip -r -X ${MOD_NAME}/${MOD_NAME}_${VERSION}.zip ${MOD_NAME} --exclude \*.zip
