@@ -1,0 +1,66 @@
+name: Build and Release
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq zip
+
+      - name: Read mod metadata
+        id: metadata
+        run: |
+          MOD_NAME="$(jq -r '.name' info.json)"
+          VERSION="$(jq -r '.version' info.json)"
+          TAG="v${VERSION}"
+          ZIP_FILE="${MOD_NAME}_${VERSION}.zip"
+
+          echo "mod_name=${MOD_NAME}" >> "$GITHUB_OUTPUT"
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+          echo "tag=${TAG}" >> "$GITHUB_OUTPUT"
+          echo "zip_file=${ZIP_FILE}" >> "$GITHUB_OUTPUT"
+
+      - name: Run build script
+        run: |
+          chmod +x ./build
+          ./build
+
+      - name: Verify release artifact exists
+        run: test -f "${{ steps.metadata.outputs.zip_file }}"
+
+      - name: Delete existing release (if any)
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release delete "${{ steps.metadata.outputs.tag }}" --yes --cleanup-tag || true
+
+      - name: Recreate tag for current commit
+        run: |
+          git tag -f "${{ steps.metadata.outputs.tag }}" "${GITHUB_SHA}"
+          git push origin "refs/tags/${{ steps.metadata.outputs.tag }}" --force
+
+      - name: Create release and upload artifact
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create "${{ steps.metadata.outputs.tag }}" \
+            "${{ steps.metadata.outputs.zip_file }}" \
+            --title "${{ steps.metadata.outputs.mod_name }} ${{ steps.metadata.outputs.version }}" \
+            --notes "Automated release for version ${{ steps.metadata.outputs.version }}"
