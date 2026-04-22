@@ -18,7 +18,7 @@ local function add_additional_categories(recipe_name, categories)
   end
 end
 
-add_additional_categories("electric-engine-unit", {"electronics-with-fluid"})
+add_additional_categories("electric-engine-unit", {"electronics-with-fluid", "AdvFurn"})
 add_additional_categories("flying-robot-frame", {"electronics", "AdvFurn"})
 add_additional_categories("low-density-structure", {"electronics", "AdvFurn"})
 add_additional_categories("iron-gear-wheel", {"electronics", "AdvFurn"})
@@ -27,8 +27,25 @@ add_additional_categories("concrete", {"electronics-with-fluid", "AdvFurn"})
 add_additional_categories("refined-concrete", {"electronics-with-fluid", "AdvFurn"})
 add_additional_categories("landfill", {"electronics", "AdvFurn"})
 add_additional_categories("space-platform-foundation", {"electronics", "AdvFurn"})
-add_additional_categories("rocket-fuel", {"electronics-with-fluid"})
+add_additional_categories("rocket-fuel", {"electronics-with-fluid", "AdvFurn"})
 add_additional_categories("copper-cable", {"AdvFurn"})
+
+add_additional_categories("kr-steel-pipe", {"AdvFurn"})
+add_additional_categories("kr-steel-pipe-to-ground", {"AdvFurn"})
+add_additional_categories("kr-steel-pump", {"AdvFurn"})
+add_additional_categories("kr-electronic-components", {"AdvFurn"})
+add_additional_categories("kr-easy-electronic-components", {"AdvFurn"})
+add_additional_categories("kr-iron-beam", {"AdvFurn"})
+add_additional_categories("kr-steel-gear-wheel", {"AdvFurn"})
+add_additional_categories("kr-steel-beam", {"AdvFurn"})
+add_additional_categories("kr-imersium-plate", {"AdvFurn"})
+add_additional_categories("kr-imersium-gear-wheel", {"AdvFurn"})
+add_additional_categories("kr-imersium-beam", {"AdvFurn"})
+add_additional_categories("kr-inserter-parts", {"AdvFurn"})
+add_additional_categories("kr-blank-tech-card", {"AdvFurn"})
+add_additional_categories("kr-fuel-from-light-oil", {"AdvFurn"})
+add_additional_categories("kr-rocket-fuel-with-hydrogen-chloride", {"AdvFurn"})
+add_additional_categories("ammonia-rocket-fuel", {"AdvFurn"})
 
 add_additional_categories("assembling-machine-1", {"electronics"})
 add_additional_categories("assembling-machine-2", {"electronics"})
@@ -53,7 +70,7 @@ add_additional_categories("pump", {"electronics"})
 add_additional_categories("stone-furnace", {"electronics"})
 add_additional_categories("oil-refinery", {"electronics"})
 add_additional_categories("chemical-plant", {"electronics"})
-add_additional_categories("engine-unit", {"electronics"})
+add_additional_categories("engine-unit", {"electronics", "AdvFurn"})
 add_additional_categories("heat-pipe", {"electronics"})
 add_additional_categories("repair-pack", {"electronics"})
 add_additional_categories("boiler", {"electronics"})
@@ -111,27 +128,15 @@ add_additional_categories("explosive-rocket", {"electronics"})
 add_additional_categories("cluster-grenade", {"electronics"})
 add_additional_categories("cliff-explosives", {"electronics"})
 
-add_additional_categories("automation-science-pack", {"electronics"})
-add_additional_categories("logistic-science-pack", {"electronics"})
-add_additional_categories("military-science-pack", {"electronics"})
-add_additional_categories("chemical-science-pack", {"electronics"})
-add_additional_categories("production-science-pack", {"electronics"})
-add_additional_categories("utility-science-pack", {"electronics"})
-add_additional_categories("space-science-pack", {"electronics"})
-
 add_additional_categories("rail", {"electronics", "AdvFurn"})
 add_additional_categories("rail-support", {"electronics-with-fluid", "AdvFurn"})
 add_additional_categories("rail-ramp", {"electronics-with-fluid", "AdvFurn"})
-
-add_additional_categories("aai-loader", {"electronics"})
-add_additional_categories("aai-fast-loader", {"electronics"})
-add_additional_categories("aai-express-loader", {"electronics"})
-add_additional_categories("aai-turbo-loader", {"electronics"})
 
 --- Allow a few more productivity modules in Beacons, originally 2
 data.raw["beacon"]["beacon"].module_slots = 4
 --- Increase the supply area distance of Beacons, originally 3
 data.raw["beacon"]["beacon"].supply_area_distance = 4
+data.raw["beacon"]["beacon"].allowed_effects = {"speed", "productivity", "consumption", "pollution", "quality"}
 
 if data.raw["assembling-machine"]["furnace-pro-01"] then
   --- Allow a few more productivity modules in Advanced Furnaces
