@@ -6,6 +6,10 @@
 -- https://github.com/wube/factorio-data/blob/master/space-age/prototypes/entity/entities.lua
 -- https://github.com/wube/factorio-data/blob/master/space-age/prototypes/recipe.lua
 
+
+
+
+
 local function add_additional_categories(recipe_name, categories)
   if data.raw.recipe[recipe_name] then
     local recipe = data.raw.recipe[recipe_name]
@@ -155,4 +159,40 @@ if data.raw.recipe["steel-plate2"] then
   -- data.raw.recipe["steel-plate2"].results = {{type="item", name="steel-plate", amount=500}}
   -- data.raw.recipe["steel-plate2"].ingredients[1].amount = 1
   -- data.raw.recipe["steel-plate2"].results[1].amount = 500
+end
+
+if mods["planet-muluna"] then
+  local rro = Muluna.rro
+  local asteroid_util = require "__space-age__.prototypes.planet.asteroid-spawn-definitions"
+
+  local parent_ratio = {3, 2, 1 , 0}
+  local muluna_ratio = {1,1,1,1}
+  local muluna_asteroids =
+  {
+    has_promethium_asteroids = true,
+    probability_on_range_chunk =
+    {
+      {position = 0.1, probability = 0.0125, angle_when_stopped = 1},
+      {position = 0.9, probability = 0.5, angle_when_stopped = 1}
+    },
+    type_ratios =
+    {
+      {position = 0.1, ratios = parent_ratio},
+      {position = 0.9, ratios = muluna_ratio},
+    }
+  }
+
+  local asteroid_spawn_definitions_connection = asteroid_util.spawn_definitions(muluna_asteroids)
+  local new_asteroids = {}
+
+  data.raw["planet"]["muluna"].asteroid_spawn_definitions = asteroid_util.spawn_definitions(muluna_asteroids,0.9)
+  data.raw["planet"]["muluna"].asteroid_spawn_influence = 0.1
+
+  local anorthite = table.deepcopy(asteroid_spawn_definitions_connection[1])
+  rro.deep_replace(anorthite,"metallic-asteroid-chunk","anorthite-chunk")
+  table.insert(asteroid_spawn_definitions_connection,anorthite)
+
+  if data.raw["space-connection"]["nauvis-muluna"] then
+    data.raw["space-connection"]["nauvis-muluna"].asteroid_spawn_definitions = asteroid_spawn_definitions_connection
+  end
 end
