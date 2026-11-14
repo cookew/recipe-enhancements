@@ -2,7 +2,7 @@
 	"author": "William Cooke",
 	"dependencies": ["space-age"],
 	"description": "Recipe enhancements.",
-	"factorio_version": "2.0",
+	"factorio_version": "2.1",
 	"homepage": "",
 	"name": "recipe-enhancements",
 	"title": "Recipe Enhancements",
